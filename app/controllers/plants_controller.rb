@@ -8,6 +8,9 @@ class PlantsController < ApplicationController
   def show
     @plant_photos = @plant.plant_photos.with_attached_image.recent_first
     @plant_events = @plant.plant_events.order(occurred_at: :desc, created_at: :desc)
+    @latest_observation = @plant.plant_events.where(event_type: %w[observation new_leaf flowering]).order(occurred_at: :desc).first
+    @days_together = @plant.acquired_at.present? ? (Date.current - @plant.acquired_at).to_i : nil
+    @remaining_xp = [@plant.xp_for_next_level - @plant.xp, 0].max
   end
 
   def new

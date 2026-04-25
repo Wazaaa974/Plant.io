@@ -1,0 +1,28 @@
+<% primary_plant = current_user.plants.first %>
+<nav class="pio-tabbar">
+  <div class="pio-tabbar-inner">
+    <%= link_to root_path, class: "pio-tab-link #{active == :jungle ? 'is-active' : ''}" do %>
+      <%= pio_icon(:home, size: 20) %>
+      <span>Jungle</span>
+    <% end %>
+
+    <%= link_to(primary_plant ? plant_path(primary_plant) : plants_path, class: "pio-tab-link #{active == :journal ? 'is-active' : ''}") do %>
+      <%= pio_icon(:book, size: 20) %>
+      <span>Journal</span>
+    <% end %>
+
+    <%= link_to new_plant_path, class: "pio-tab-link pio-tab-link-primary" do %>
+      <%= pio_icon(:plus, size: 22, stroke_width: 2.4) %>
+    <% end %>
+
+    <%= link_to plants_path, class: "pio-tab-link #{active == :collection ? 'is-active' : ''}" do %>
+      <%= pio_icon(:medal, size: 20) %>
+      <span>Badges</span>
+    <% end %>
+
+    <%= link_to(primary_plant ? plant_path(primary_plant) : root_path, class: "pio-tab-link #{active == :profile ? 'is-active' : ''}") do %>
+      <%= pio_icon(:user, size: 20) %>
+      <span>Profil</span>
+    <% end %>
+  </div>
+</nav>

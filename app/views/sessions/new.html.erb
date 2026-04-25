@@ -1,32 +1,62 @@
 <% content_for :title, "Sign in | plante.io" %>
 
-<section class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-  <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8">
-    <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">Sign in</p>
-    <h1 class="mt-3 font-serif text-4xl text-white">Welcome back to your greenhouse.</h1>
-    <p class="mt-4 max-w-lg text-stone-300">
-      Track growth, add fresh photos, and keep building a living collection around the plants you already love.
-    </p>
+<section class="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+  <div class="relative overflow-hidden rounded-[2.3rem] border border-white/8 bg-white/5 p-8 lg:p-10">
+    <div class="absolute right-[-10%] top-[-10%] h-56 w-56 rounded-full pio-aura-mint blur-2xl"></div>
+    <div class="absolute bottom-[-16%] left-[-10%] h-48 w-48 rounded-full pio-aura-violet blur-2xl"></div>
+
+    <div class="relative">
+      <p class="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[var(--pio-leaf)]/75">Connexion</p>
+      <h1 class="mt-3 max-w-xl font-serif text-[2.8rem] leading-[0.98] tracking-[-0.08em] text-[var(--pio-cream)]">
+        Reviens dans ta <span class="text-[var(--pio-leaf)]">jungle vivante</span>.
+      </h1>
+      <p class="mt-4 max-w-md text-sm leading-7 text-white/58">
+        plante.io suit la croissance comme une collection sensible : photos, XP, nouvelles feuilles, et petits rituels qui donnent envie de revenir.
+      </p>
+
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <div class="pio-glass rounded-[1.4rem] p-4">
+          <div class="mb-3 grid h-9 w-9 place-items-center rounded-[0.9rem] bg-[var(--pio-mint)]/16 text-[var(--pio-mint)]">
+            <%= pio_icon(:sparkle, size: 18, stroke_width: 2.1) %>
+          </div>
+          <p class="font-display text-sm font-semibold text-[var(--pio-cream)]">Croissance visible</p>
+          <p class="mt-1 text-[0.78rem] leading-5 text-white/45">L'historique photo et l'XP racontent une progression lente mais concrete.</p>
+        </div>
+
+        <div class="pio-glass rounded-[1.4rem] p-4">
+          <div class="mb-3 grid h-9 w-9 place-items-center rounded-[0.9rem] bg-[var(--pio-sun)]/16 text-[var(--pio-sun)]">
+            <%= pio_icon(:camera, size: 18, stroke_width: 2.1) %>
+          </div>
+          <p class="font-display text-sm font-semibold text-[var(--pio-cream)]">Compagnons vegetaux</p>
+          <p class="mt-1 text-[0.78rem] leading-5 text-white/45">Chaque plante devient une carte vivante avec stade, aura et souvenirs.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="rounded-[2rem] border border-white/10 bg-stone-900/80 p-8">
+  <div class="pio-glass rounded-[2.1rem] p-7 sm:p-8">
+    <div class="mb-6">
+      <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/42">Sign in</p>
+      <h2 class="mt-2 font-display text-[1.85rem] font-semibold tracking-[-0.05em] text-[var(--pio-cream)]">Bienvenue de retour.</h2>
+    </div>
+
     <%= form_with url: session_path, class: "space-y-5" do |form| %>
       <div>
-        <%= form.label :email_address, "Email", class: "mb-2 block text-sm text-stone-300" %>
-        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address], class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "you@example.com" %>
+        <%= form.label :email_address, "Email", class: "mb-2 block text-sm text-white/62" %>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address], class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "you@example.com" %>
       </div>
 
       <div>
-        <%= form.label :password, "Password", class: "mb-2 block text-sm text-stone-300" %>
-        <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Your password" %>
+        <%= form.label :password, "Password", class: "mb-2 block text-sm text-white/62" %>
+        <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Your password" %>
       </div>
 
-      <%= form.submit "Sign in", class: "w-full rounded-full bg-emerald-300 px-5 py-3 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+      <%= form.submit "Entrer dans ma jungle", class: "inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(160deg,_var(--pio-mint),_var(--pio-leaf))] px-5 py-3 text-sm font-semibold text-[var(--pio-forest)] shadow-[0_10px_24px_rgba(91,255,152,0.28)]" %>
     <% end %>
 
-    <div class="mt-5 flex items-center justify-between text-sm">
-      <%= link_to "Forgot password?", new_password_path, class: "text-stone-400 transition hover:text-white" %>
-      <%= link_to "Create account", sign_up_path, class: "text-emerald-200 transition hover:text-emerald-100" %>
+    <div class="mt-5 flex items-center justify-between gap-3 text-sm">
+      <%= link_to "Forgot password?", new_password_path, class: "text-white/46 transition hover:text-white" %>
+      <%= link_to "Create account", sign_up_path, class: "font-semibold text-[var(--pio-leaf)] transition hover:text-[var(--pio-mint)]" %>
     </div>
   </div>
 </section>

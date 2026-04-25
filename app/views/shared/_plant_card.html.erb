@@ -1,0 +1,34 @@
+<% meta = pio_stage_meta(plant.growth_stage) %>
+<% tint_class = meta[:color].include?("violet") ? "pio-plant-card-violet" : "" %>
+
+<%= link_to plant_path(plant), class: "pio-plant-card #{tint_class} relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-white/5 p-3.5 shadow-[0_18px_34px_rgba(0,0,0,0.36)] transition duration-300 hover:-translate-y-0.5 hover:border-white/12" do %>
+  <div class="relative z-10 flex items-start justify-between gap-3">
+    <div class="min-w-0">
+      <p class="font-display text-[1.05rem] font-semibold tracking-[-0.03em] text-[var(--pio-cream)]"><%= plant.display_name %></p>
+      <p class="truncate text-[0.72rem] italic text-white/42"><%= plant.species_name %></p>
+    </div>
+    <span class="shrink-0 rounded-full border px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em]" style="border-color: color-mix(in srgb, <%= meta[:color] %> 45%, transparent); color: <%= meta[:color] %>; background: color-mix(in srgb, <%= meta[:color] %> 12%, transparent);">
+      <%= plant.level %>
+    </span>
+  </div>
+
+  <div class="relative z-10 mt-3 overflow-hidden rounded-[1.2rem] bg-black/25">
+    <% if plant.hero_photo&.image&.attached? %>
+      <%= image_tag plant.hero_photo.image, class: "h-44 w-full object-cover" %>
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#081e17]/80 to-transparent"></div>
+    <% else %>
+      <div class="flex h-44 items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(91,255,152,0.18),_transparent_38%),linear-gradient(180deg,_rgba(11,47,36,1)_0%,_rgba(8,30,23,1)_100%)] px-6 text-center text-sm text-white/38">
+        Ajoute une premiere photo pour reveiller son aura.
+      </div>
+    <% end %>
+  </div>
+
+  <div class="relative z-10 mt-3 flex items-center justify-between text-[0.72rem] text-white/62">
+    <span><%= meta[:label] %></span>
+    <span><%= plant.xp %> XP</span>
+  </div>
+
+  <div class="pio-progress relative z-10 mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
+    <span class="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,_var(--pio-mint),_var(--pio-leaf))]" style="width: <%= pio_growth_percent(plant) %>%"></span>
+  </div>
+<% end %>
