@@ -1,0 +1,40 @@
+<% content_for :title, "Plants | plante.io" %>
+
+<section class="flex items-end justify-between gap-6">
+  <div>
+    <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">Collection</p>
+    <h1 class="mt-2 font-serif text-4xl text-white">Your plants</h1>
+    <p class="mt-3 max-w-2xl text-stone-400">A simple index for the first version of the app. Each plant already has a level, XP, growth stage, and room for visual history.</p>
+  </div>
+
+  <%= link_to "New plant", new_plant_path, class: "rounded-full bg-emerald-300 px-5 py-3 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+</section>
+
+<section class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+  <% @plants.each do |plant| %>
+    <%= link_to plant_path(plant), class: "group rounded-[1.5rem] border border-white/10 bg-white/5 p-5 transition hover:-translate-y-0.5 hover:border-emerald-300/30 hover:bg-white/8" do %>
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="font-serif text-2xl text-white"><%= plant.display_name %></p>
+          <p class="text-sm text-stone-400"><%= plant.species_name %></p>
+        </div>
+        <span class="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-emerald-100"><%= plant.growth_stage %></span>
+      </div>
+
+      <div class="mt-5 overflow-hidden rounded-[1.25rem] bg-stone-900/80">
+        <% if plant.hero_photo&.image&.attached? %>
+          <%= image_tag plant.hero_photo.image, class: "h-56 w-full object-cover transition duration-500 group-hover:scale-[1.03]" %>
+        <% else %>
+          <div class="flex h-56 items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(167,243,208,0.18),_transparent_35%),linear-gradient(180deg,_rgba(24,24,27,1)_0%,_rgba(17,24,39,1)_100%)] px-6 text-center text-stone-400">
+            Waiting for a first photo.
+          </div>
+        <% end %>
+      </div>
+
+      <div class="mt-4 flex items-center justify-between text-sm text-stone-300">
+        <span>Level <%= plant.level %></span>
+        <span><%= plant.xp %> XP</span>
+      </div>
+    <% end %>
+  <% end %>
+</section>

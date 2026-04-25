@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "plante.io" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="plante.io">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body class="min-h-screen bg-stone-950 text-stone-100 antialiased">
+    <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(187,247,208,0.18),_transparent_35%),linear-gradient(180deg,_#17211c_0%,_#101512_45%,_#090b0a_100%)]">
+      <header class="border-b border-white/10">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div>
+            <%= link_to "plante.io", authenticated? ? root_path : new_session_path, class: "font-serif text-2xl tracking-tight text-emerald-200" %>
+            <p class="text-sm text-stone-400">Raise your plants like a living collection.</p>
+          </div>
+
+          <nav class="flex items-center gap-3 text-sm">
+            <% if authenticated? %>
+              <span class="hidden text-stone-400 sm:block"><%= current_user.email_address %></span>
+              <%= link_to "Collection", plants_path, class: "rounded-full border border-white/10 px-4 py-2 text-stone-200 transition hover:border-emerald-300/40 hover:text-white" %>
+              <%= link_to "New plant", new_plant_path, class: "rounded-full bg-emerald-300 px-4 py-2 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+              <%= button_to "Sign out", session_path, method: :delete, class: "rounded-full border border-white/10 px-4 py-2 text-stone-300 transition hover:border-white/20 hover:text-white" %>
+            <% else %>
+              <%= link_to "Sign in", new_session_path, class: "rounded-full border border-white/10 px-4 py-2 text-stone-200 transition hover:border-emerald-300/40 hover:text-white" %>
+              <%= link_to "Create account", sign_up_path, class: "rounded-full bg-emerald-300 px-4 py-2 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+            <% end %>
+          </nav>
+        </div>
+      </header>
+
+      <main class="mx-auto max-w-6xl px-6 py-8">
+        <% if flash[:notice].present? %>
+          <div class="mb-6 rounded-2xl border border-emerald-300/30 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100"><%= flash[:notice] %></div>
+        <% end %>
+
+        <% if flash[:alert].present? %>
+          <div class="mb-6 rounded-2xl border border-rose-300/30 bg-rose-300/10 px-4 py-3 text-sm text-rose-100"><%= flash[:alert] %></div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

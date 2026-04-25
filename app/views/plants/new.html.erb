@@ -1,0 +1,77 @@
+<% content_for :title, "Add a plant | plante.io" %>
+
+<section class="mx-auto max-w-4xl">
+  <div class="mb-8">
+    <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">New plant</p>
+    <h1 class="mt-2 font-serif text-4xl text-white">Add a new companion to the collection.</h1>
+    <p class="mt-3 max-w-2xl text-stone-400">For the MVP we keep creation intentionally simple: identity, stage, location, and one opening photo.</p>
+  </div>
+
+  <%= form_with model: @plant, class: "space-y-8" do |form| %>
+    <div class="grid gap-8 rounded-[2rem] border border-white/10 bg-stone-900/80 p-8 lg:grid-cols-2">
+      <div class="space-y-5">
+        <div>
+          <%= form.label :nickname, class: "mb-2 block text-sm text-stone-300" %>
+          <%= form.text_field :nickname, required: true, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Momo" %>
+        </div>
+
+        <div>
+          <%= form.label :species_name, "Species", class: "mb-2 block text-sm text-stone-300" %>
+          <%= form.text_field :species_name, required: true, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Monstera deliciosa" %>
+        </div>
+
+        <div>
+          <%= form.label :common_name, class: "mb-2 block text-sm text-stone-300" %>
+          <%= form.text_field :common_name, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Swiss cheese plant" %>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :growth_stage, class: "mb-2 block text-sm text-stone-300" %>
+            <%= form.select :growth_stage, Plant.growth_stages.keys.map { |stage| [stage.humanize, stage] }, {}, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
+          </div>
+
+          <div>
+            <%= form.label :acquired_at, "Added at home", class: "mb-2 block text-sm text-stone-300" %>
+            <%= form.date_field :acquired_at, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
+          </div>
+        </div>
+
+        <div>
+          <%= form.label :location_name, "Room or spot", class: "mb-2 block text-sm text-stone-300" %>
+          <%= form.text_field :location_name, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Living room shelf" %>
+        </div>
+      </div>
+
+      <div class="space-y-5">
+        <div>
+          <%= form.label :description, class: "mb-2 block text-sm text-stone-300" %>
+          <%= form.text_area :description, rows: 7, class: "w-full rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "A couple of lines to remember where it came from, what you noticed, or what makes it special." %>
+        </div>
+
+        <%= form.fields_for :plant_photo, @plant.plant_photos.first do |photo_fields| %>
+          <div class="rounded-[1.5rem] border border-white/10 bg-black/10 p-5">
+            <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">Opening photo</p>
+
+            <div class="mt-4">
+              <%= photo_fields.label :image, "Image", class: "mb-2 block text-sm text-stone-300" %>
+              <%= photo_fields.file_field :image, direct_upload: false, accept: "image/*", class: "block w-full text-sm text-stone-300 file:mr-4 file:rounded-full file:border-0 file:bg-emerald-300 file:px-4 file:py-2 file:font-medium file:text-stone-950 hover:file:bg-emerald-200" %>
+            </div>
+
+            <div class="mt-4">
+              <%= photo_fields.label :taken_at, "Taken at", class: "mb-2 block text-sm text-stone-300" %>
+              <%= photo_fields.datetime_local_field :taken_at, value: (photo_fields.object.taken_at || Time.current).strftime("%Y-%m-%dT%H:%M"), class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
+            </div>
+
+            <div class="mt-4">
+              <%= photo_fields.label :notes, "Photo note", class: "mb-2 block text-sm text-stone-300" %>
+              <%= photo_fields.text_area :notes, rows: 3, class: "w-full rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "New leaf coming in, repotted this week, moved closer to the window..." %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form.submit "Create plant", class: "rounded-full bg-emerald-300 px-5 py-3 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+  <% end %>
+</section>

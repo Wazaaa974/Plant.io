@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plant: one
+  taken_at: 2026-04-25 19:21:50
+  notes: MyText
+  ai_analysis_status: MyString
+  ai_species_guess: MyString
+  ai_health_summary: MyText
+
+two:
+  plant: two
+  taken_at: 2026-04-25 19:21:50
+  notes: MyText
+  ai_analysis_status: MyString
+  ai_species_guess: MyString
+  ai_health_summary: MyText

@@ -1,0 +1,81 @@
+<% content_for :title, "Dashboard | plante.io" %>
+
+<section class="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+  <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-emerald-950/30 backdrop-blur">
+    <p class="mb-3 text-sm uppercase tracking-[0.2em] text-emerald-200/80">Home greenhouse</p>
+    <h1 class="max-w-2xl font-serif text-4xl leading-tight text-white sm:text-5xl">Track each plant like a companion that evolves over time.</h1>
+    <p class="mt-4 max-w-2xl text-base leading-7 text-stone-300">
+      Start simple: create a plant, add photos, log meaningful moments, and turn slow real-world growth into a collection you want to revisit.
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <%= link_to "Add your first plant", new_plant_path, class: "rounded-full bg-emerald-300 px-5 py-3 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+      <%= link_to "See collection", plants_path, class: "rounded-full border border-white/10 px-5 py-3 text-stone-200 transition hover:border-white/20 hover:text-white" %>
+    </div>
+  </div>
+
+  <aside class="grid gap-4">
+    <div class="rounded-[1.5rem] border border-white/10 bg-stone-900/80 p-6">
+      <p class="text-sm text-stone-400">Plants tracked</p>
+      <p class="mt-2 font-serif text-5xl text-white"><%= @plants.size %></p>
+    </div>
+    <div class="rounded-[1.5rem] border border-white/10 bg-stone-900/80 p-6">
+      <p class="text-sm text-stone-400">Total XP</p>
+      <p class="mt-2 font-serif text-5xl text-white"><%= @plants.sum(&:xp) %></p>
+    </div>
+    <div class="rounded-[1.5rem] border border-white/10 bg-stone-900/80 p-6">
+      <p class="text-sm text-stone-400">Stage mix</p>
+      <p class="mt-3 text-sm leading-7 text-stone-300">
+        <%= @plants.group_by(&:growth_stage).map { |stage, plants| "#{stage.humanize}: #{plants.count}" }.presence&.join(" • ") || "No plants yet." %>
+      </p>
+    </div>
+  </aside>
+</section>
+
+<section class="mt-8">
+  <div class="mb-4 flex items-center justify-between">
+    <div>
+      <h2 class="font-serif text-2xl text-white">Collection</h2>
+      <p class="text-sm text-stone-400">A first version of the dashboard, ready for real data.</p>
+    </div>
+    <%= link_to "New plant", new_plant_path, class: "rounded-full border border-white/10 px-4 py-2 text-sm text-stone-200 transition hover:border-white/20 hover:text-white" %>
+  </div>
+
+  <% if @plants.any? %>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <% @plants.each do |plant| %>
+        <%= link_to plant_path(plant), class: "group rounded-[1.5rem] border border-white/10 bg-white/5 p-5 transition hover:-translate-y-0.5 hover:border-emerald-300/30 hover:bg-white/8" do %>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="font-serif text-2xl text-white"><%= plant.display_name %></p>
+              <p class="text-sm text-stone-400"><%= plant.species_name %></p>
+            </div>
+            <span class="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-emerald-100"><%= plant.growth_stage %></span>
+          </div>
+
+          <div class="mt-5 overflow-hidden rounded-[1.25rem] bg-stone-900/80">
+            <% if plant.hero_photo&.image&.attached? %>
+              <%= image_tag plant.hero_photo.image, class: "h-56 w-full object-cover transition duration-500 group-hover:scale-[1.03]" %>
+            <% else %>
+              <div class="flex h-56 items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(167,243,208,0.18),_transparent_35%),linear-gradient(180deg,_rgba(24,24,27,1)_0%,_rgba(17,24,39,1)_100%)] px-6 text-center text-stone-400">
+                Add a first photo to give this plant its creature card.
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between text-sm text-stone-300">
+            <span>Level <%= plant.level %></span>
+            <span><%= plant.xp %> XP</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="rounded-[1.5rem] border border-dashed border-white/15 bg-black/10 px-6 py-12 text-center">
+      <p class="font-serif text-3xl text-white">No plants yet.</p>
+      <p class="mx-auto mt-3 max-w-xl text-stone-400">
+        The first milestone is simple: create one plant, give it a name, and add a photo. From there we can start shaping the collection, growth logic, and AI flow.
+      </p>
+    </div>
+  <% end %>
+</section>
