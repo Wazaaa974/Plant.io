@@ -1,0 +1,24 @@
+one:
+  user: one
+  nickname: Momo
+  species_name: Monstera deliciosa
+  common_name: Monstera
+  description: First plant in the test suite.
+  level: 1
+  xp: 10
+  growth_stage: seedling
+  acquired_at: 2026-04-01
+  location_name: Living room
+
+two:
+  user: two
+  nickname: Sunny
+  species_name: Epipremnum aureum
+  common_name: Pothos
+  description: Second plant in the test suite.
+  level: 2
+  xp: 120
+  growth_stage: growing
+  acquired_at: 2026-03-15
+  location_name: Kitchen
+# column: value
