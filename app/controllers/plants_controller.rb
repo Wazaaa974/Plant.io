@@ -14,7 +14,7 @@ class PlantsController < ApplicationController
   end
 
   def new
-    @plant = current_user.plants.new(acquired_at: Date.current)
+    @plant = current_user.plants.new(acquired_at: Date.current, growth_stage: :growing)
     @plant.plant_photos.build(taken_at: Time.current)
   end
 

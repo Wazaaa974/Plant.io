@@ -1,4 +1,4 @@
-<% primary_plant = current_user.plants.first %>
+<% primary_plant = current_user.plants.where.not(id: nil).order(created_at: :desc).first %>
 <nav class="pio-tabbar">
   <div class="pio-tabbar-inner">
     <%= link_to root_path, class: "pio-tab-link #{active == :jungle ? 'is-active' : ''}" do %>
@@ -11,7 +11,7 @@
       <span>Journal</span>
     <% end %>
 
-    <%= link_to new_plant_path, class: "pio-tab-link pio-tab-link-primary" do %>
+    <%= link_to new_plant_path, class: "pio-tab-link pio-tab-link-primary #{active == :add ? 'is-active' : ''}" do %>
       <%= pio_icon(:plus, size: 22, stroke_width: 2.4) %>
     <% end %>
 

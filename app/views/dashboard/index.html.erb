@@ -63,7 +63,7 @@
           <%= pio_icon(:drop, size: 16, stroke_width: 2.1) %>
         </div>
         <p class="text-sm font-semibold text-[var(--pio-cream)]"><%= @featured_plant&.display_name || "Ta prochaine plante" %></p>
-        <p class="mt-1 text-[0.72rem] text-white/45">Un arrosage ou une nouvelle photo ferait monter l'XP.</p>
+        <p class="mt-1 text-[0.72rem] text-white/45">Une photo ou un evenement suffit pour faire avancer son niveau.</p>
       </div>
 
       <div class="pio-glass rounded-[1.2rem] p-3.5">
@@ -75,6 +75,82 @@
       </div>
     </div>
   </div>
+
+  <% if @featured_plant.present? %>
+    <% stage = pio_stage_meta(@featured_plant.growth_stage) %>
+    <section class="mt-6 pio-glass overflow-hidden rounded-[1.8rem]">
+      <div class="relative h-72">
+        <% if @featured_plant.hero_photo&.image&.attached? %>
+          <%= image_tag @featured_plant.hero_photo.image, class: "h-full w-full object-cover" %>
+        <% else %>
+          <div class="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(91,255,152,0.22),_transparent_38%),linear-gradient(180deg,_rgba(11,47,36,1)_0%,_rgba(8,30,23,1)_100%)]"></div>
+        <% end %>
+        <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,_rgba(8,30,23,0.18)_0%,_rgba(8,30,23,0.04)_35%,_rgba(8,30,23,0.68)_100%)]"></div>
+        <div class="absolute inset-x-0 bottom-0 p-4">
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <p class="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[var(--pio-leaf)]/75">Plante mise en avant</p>
+              <h2 class="mt-1 font-serif text-[2.2rem] tracking-[-0.08em] text-[var(--pio-cream)]"><%= @featured_plant.display_name %></h2>
+              <p class="mt-1 text-sm italic text-white/50"><%= @featured_plant.species_label %><% if @featured_plant.location_name.present? %> · <%= @featured_plant.location_name %><% end %></p>
+            </div>
+            <div class="grid h-14 w-14 place-items-center rounded-full border bg-[#0b1f18]/70 text-sm font-display font-semibold backdrop-blur-xl" style="border-color: color-mix(in srgb, <%= stage[:color] %> 100%, transparent); color: <%= stage[:color] %>;">
+              <span class="text-[0.62rem] opacity-70">Lv</span>
+              <span class="-mt-1 text-base"><%= @featured_plant.level %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4">
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
+          <div>
+            <div class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold" style="border-color: color-mix(in srgb, <%= stage[:color] %> 45%, transparent); color: <%= stage[:color] %>; background: color-mix(in srgb, <%= stage[:color] %> 12%, transparent);">
+              <%= pio_icon(stage[:icon], size: 14, stroke_width: 2.1) %>
+              <span><%= stage[:label] %></span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-white/52"><%= pio_stage_supporting_copy(@featured_plant.growth_stage) %></p>
+          </div>
+          <div class="rounded-[1.2rem] border border-white/8 bg-black/10 px-3 py-2 text-right">
+            <p class="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-white/36">Stade</p>
+            <p class="mt-1 font-display text-base font-semibold text-[var(--pio-cream)]"><%= pio_stage_step_label(@featured_plant.growth_stage) %></p>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-[1.3rem] border border-white/8 bg-black/10 p-3.5">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/40">Progression du niveau</p>
+              <p class="mt-1 font-display text-base font-semibold text-[var(--pio-cream)]"><%= pio_level_progress_label(@featured_plant) %></p>
+            </div>
+            <div class="text-right">
+              <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-white/36">Ensuite</p>
+              <p class="mt-1 text-sm font-semibold text-[var(--pio-mint)]"><%= pio_next_level_label(@featured_plant) %></p>
+            </div>
+          </div>
+          <div class="mt-3 pio-progress relative h-2 overflow-hidden rounded-full bg-white/8">
+            <span class="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,_var(--pio-mint),_var(--pio-leaf))]" style="width: <%= pio_growth_percent(@featured_plant) %>%"></span>
+          </div>
+          <div class="mt-2 flex items-center justify-between text-[0.72rem] text-white/45">
+            <span>Total <%= @featured_plant.xp %> XP</span>
+            <span>Encore <span class="font-semibold text-[var(--pio-cream)]"><%= [100 - @featured_plant.xp_progress, 0].max %> XP</span></span>
+          </div>
+        </div>
+
+        <% if (next_stage = pio_next_stage_meta(@featured_plant.growth_stage)).present? %>
+          <div class="mt-3 flex items-center justify-between rounded-[1.15rem] border border-white/8 bg-white/4 px-3 py-2.5 text-sm">
+            <span class="text-white/48">Prochain stade</span>
+            <span class="inline-flex items-center gap-2 font-semibold" style="color: <%= next_stage[:color] %>;">
+              <%= pio_icon(next_stage[:icon], size: 14, stroke_width: 2.1) %>
+              <%= next_stage[:label] %>
+            </span>
+          </div>
+        <% end %>
+        <div class="mt-4 flex items-center gap-2">
+          <%= link_to "Ouvrir sa fiche", plant_path(@featured_plant), class: "inline-flex rounded-full bg-[linear-gradient(160deg,_var(--pio-mint),_var(--pio-leaf))] px-4 py-2.5 text-sm font-semibold text-[var(--pio-forest)]" %>
+          <%= link_to "Journal", plant_path(@featured_plant), class: "inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/72" %>
+        </div>
+      </div>
+    </section>
+  <% end %>
 
   <div class="mt-6 flex items-center justify-between">
     <div>
@@ -94,57 +170,14 @@
     <div class="pio-glass mt-4 rounded-[1.7rem] border border-dashed p-8 text-center">
       <p class="font-serif text-[1.8rem] tracking-[-0.05em] text-[var(--pio-cream)]">La jungle attend sa premiere plante.</p>
       <p class="mx-auto mt-3 max-w-[16rem] text-sm leading-6 text-white/45">Commence avec une photo et un nom, puis on donnera a la collection sa vraie personnalite.</p>
+      <div class="mx-auto mt-5 grid max-w-[18rem] gap-2 text-left text-sm text-white/55">
+        <div class="rounded-[1rem] border border-white/8 bg-white/4 px-3 py-2.5">1. Ajouter une plante</div>
+        <div class="rounded-[1rem] border border-white/8 bg-white/4 px-3 py-2.5">2. Lui donner une photo et un nom</div>
+        <div class="rounded-[1rem] border border-white/8 bg-white/4 px-3 py-2.5">3. Revenir pour suivre sa progression</div>
+      </div>
       <%= link_to "Ajouter une plante", new_plant_path, class: "mt-5 inline-flex rounded-full bg-[var(--pio-mint)] px-5 py-3 text-sm font-semibold text-[var(--pio-forest)]" %>
     </div>
   <% end %>
 </section>
 
 <%= render "shared/bottom_nav", active: :jungle %>
-
-<section class="mt-8">
-  <div class="mb-4 flex items-center justify-between">
-    <div>
-      <h2 class="font-serif text-2xl text-white">Collection</h2>
-      <p class="text-sm text-stone-400">A first version of the dashboard, ready for real data.</p>
-    </div>
-    <%= link_to "New plant", new_plant_path, class: "rounded-full border border-white/10 px-4 py-2 text-sm text-stone-200 transition hover:border-white/20 hover:text-white" %>
-  </div>
-
-  <% if @plants.any? %>
-    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      <% @plants.each do |plant| %>
-        <%= link_to plant_path(plant), class: "group rounded-[1.5rem] border border-white/10 bg-white/5 p-5 transition hover:-translate-y-0.5 hover:border-emerald-300/30 hover:bg-white/8" do %>
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="font-serif text-2xl text-white"><%= plant.display_name %></p>
-              <p class="text-sm text-stone-400"><%= plant.species_name %></p>
-            </div>
-            <span class="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-emerald-100"><%= plant.growth_stage %></span>
-          </div>
-
-          <div class="mt-5 overflow-hidden rounded-[1.25rem] bg-stone-900/80">
-            <% if plant.hero_photo&.image&.attached? %>
-              <%= image_tag plant.hero_photo.image, class: "h-56 w-full object-cover transition duration-500 group-hover:scale-[1.03]" %>
-            <% else %>
-              <div class="flex h-56 items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(167,243,208,0.18),_transparent_35%),linear-gradient(180deg,_rgba(24,24,27,1)_0%,_rgba(17,24,39,1)_100%)] px-6 text-center text-stone-400">
-                Add a first photo to give this plant its creature card.
-              </div>
-            <% end %>
-          </div>
-
-          <div class="mt-4 flex items-center justify-between text-sm text-stone-300">
-            <span>Level <%= plant.level %></span>
-            <span><%= plant.xp %> XP</span>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="rounded-[1.5rem] border border-dashed border-white/15 bg-black/10 px-6 py-12 text-center">
-      <p class="font-serif text-3xl text-white">No plants yet.</p>
-      <p class="mx-auto mt-3 max-w-xl text-stone-400">
-        The first milestone is simple: create one plant, give it a name, and add a photo. From there we can start shaping the collection, growth logic, and AI flow.
-      </p>
-    </div>
-  <% end %>
-</section>

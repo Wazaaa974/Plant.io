@@ -1,77 +1,131 @@
 <% content_for :title, "Add a plant | plante.io" %>
 
-<section class="mx-auto max-w-4xl">
-  <div class="mb-8">
-    <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">New plant</p>
-    <h1 class="mt-2 font-serif text-4xl text-white">Add a new companion to the collection.</h1>
-    <p class="mt-3 max-w-2xl text-stone-400">For the MVP we keep creation intentionally simple: identity, stage, location, and one opening photo.</p>
-  </div>
+<section class="pb-24">
+  <div class="relative overflow-hidden rounded-[2rem] border border-white/8 bg-white/5 p-6">
+    <div class="absolute right-[-12%] top-[-22%] h-48 w-48 rounded-full pio-aura-mint blur-2xl"></div>
+    <div class="absolute bottom-[-18%] left-[-10%] h-40 w-40 rounded-full pio-aura-violet blur-2xl"></div>
 
-  <%= form_with model: @plant, class: "space-y-8" do |form| %>
-    <div class="grid gap-8 rounded-[2rem] border border-white/10 bg-stone-900/80 p-8 lg:grid-cols-2">
-      <div class="space-y-5">
-        <div>
-          <%= form.label :nickname, class: "mb-2 block text-sm text-stone-300" %>
-          <%= form.text_field :nickname, required: true, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Momo" %>
+    <div class="relative">
+      <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[var(--pio-leaf)]/75">Nouvelle plante</p>
+      <h1 class="mt-2 max-w-[15rem] font-serif text-[2.4rem] leading-[0.98] tracking-[-0.08em] text-[var(--pio-cream)]">
+        Ajoute ton premier <span class="text-[var(--pio-leaf)]">compagnon vegetal</span>.
+      </h1>
+      <p class="mt-3 max-w-[18rem] text-sm leading-6 text-white/54">
+        Va a l'essentiel : une photo, un nom, et l'espece si tu la connais deja. Tu pourras completer le reste ensuite.
+      </p>
+
+      <div class="mt-5 grid gap-2 text-sm text-white/58">
+        <div class="flex items-start gap-3">
+          <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--pio-mint)]/12 text-[var(--pio-mint)]"><%= pio_icon(:camera, size: 12, stroke_width: 2.3) %></span>
+          <p>Une photo d'ouverture donne tout de suite une vraie presence a la carte plante.</p>
         </div>
-
-        <div>
-          <%= form.label :species_name, "Species", class: "mb-2 block text-sm text-stone-300" %>
-          <%= form.text_field :species_name, required: true, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Monstera deliciosa" %>
+        <div class="flex items-start gap-3">
+          <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--pio-sun)]/12 text-[var(--pio-sun)]"><%= pio_icon(:sparkle, size: 12, stroke_width: 2.3) %></span>
+          <p>La progression et l'histoire se construiront ensuite, au fil des retours.</p>
         </div>
-
-        <div>
-          <%= form.label :common_name, class: "mb-2 block text-sm text-stone-300" %>
-          <%= form.text_field :common_name, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Swiss cheese plant" %>
-        </div>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-          <div>
-            <%= form.label :growth_stage, class: "mb-2 block text-sm text-stone-300" %>
-            <%= form.select :growth_stage, Plant.growth_stages.keys.map { |stage| [stage.humanize, stage] }, {}, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
-          </div>
-
-          <div>
-            <%= form.label :acquired_at, "Added at home", class: "mb-2 block text-sm text-stone-300" %>
-            <%= form.date_field :acquired_at, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
-          </div>
-        </div>
-
-        <div>
-          <%= form.label :location_name, "Room or spot", class: "mb-2 block text-sm text-stone-300" %>
-          <%= form.text_field :location_name, class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "Living room shelf" %>
-        </div>
-      </div>
-
-      <div class="space-y-5">
-        <div>
-          <%= form.label :description, class: "mb-2 block text-sm text-stone-300" %>
-          <%= form.text_area :description, rows: 7, class: "w-full rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "A couple of lines to remember where it came from, what you noticed, or what makes it special." %>
-        </div>
-
-        <%= form.fields_for :plant_photo, @plant.plant_photos.first do |photo_fields| %>
-          <div class="rounded-[1.5rem] border border-white/10 bg-black/10 p-5">
-            <p class="text-sm uppercase tracking-[0.2em] text-emerald-200/80">Opening photo</p>
-
-            <div class="mt-4">
-              <%= photo_fields.label :image, "Image", class: "mb-2 block text-sm text-stone-300" %>
-              <%= photo_fields.file_field :image, direct_upload: false, accept: "image/*", class: "block w-full text-sm text-stone-300 file:mr-4 file:rounded-full file:border-0 file:bg-emerald-300 file:px-4 file:py-2 file:font-medium file:text-stone-950 hover:file:bg-emerald-200" %>
-            </div>
-
-            <div class="mt-4">
-              <%= photo_fields.label :taken_at, "Taken at", class: "mb-2 block text-sm text-stone-300" %>
-              <%= photo_fields.datetime_local_field :taken_at, value: (photo_fields.object.taken_at || Time.current).strftime("%Y-%m-%dT%H:%M"), class: "w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-emerald-300/40" %>
-            </div>
-
-            <div class="mt-4">
-              <%= photo_fields.label :notes, "Photo note", class: "mb-2 block text-sm text-stone-300" %>
-              <%= photo_fields.text_area :notes, rows: 3, class: "w-full rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-stone-500 focus:border-emerald-300/40", placeholder: "New leaf coming in, repotted this week, moved closer to the window..." %>
-            </div>
-          </div>
-        <% end %>
       </div>
     </div>
+  </div>
 
-    <%= form.submit "Create plant", class: "rounded-full bg-emerald-300 px-5 py-3 font-medium text-stone-950 transition hover:bg-emerald-200" %>
+  <%= form_with model: @plant, class: "mt-6 space-y-5" do |form| %>
+    <section class="pio-glass rounded-[1.7rem] p-5">
+      <div class="mb-5">
+        <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/42">Essentiel</p>
+        <h2 class="mt-1 font-display text-[1.35rem] font-semibold tracking-[-0.04em] text-[var(--pio-cream)]">Ce qu'il faut pour commencer</h2>
+        <p class="mt-2 text-sm leading-6 text-white/50">On cree d'abord la fiche vivante. Les details plus fins peuvent attendre.</p>
+      </div>
+
+      <div class="space-y-4">
+        <%= form.fields_for :plant_photo, @plant.plant_photos.first do |photo_fields| %>
+          <div class="rounded-[1.35rem] border border-dashed border-white/10 bg-black/10 p-4">
+            <div class="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <%= photo_fields.label :image, "Photo d'ouverture", class: "block text-sm text-white/62" %>
+                <p class="mt-1 text-[0.72rem] leading-5 text-white/40">Recommandee pour donner une presence immediate a la plante.</p>
+              </div>
+              <span class="rounded-full border border-white/8 bg-white/4 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/42">Optionnel</span>
+            </div>
+            <%= photo_fields.file_field :image, direct_upload: false, accept: "image/*", class: "pio-file block w-full text-sm" %>
+            <%= photo_fields.hidden_field :taken_at, value: (photo_fields.object.taken_at || Time.current).strftime("%Y-%m-%dT%H:%M") %>
+          </div>
+        <% end %>
+
+        <div>
+          <%= form.label :nickname, "Nom donne a la plante", class: "mb-2 block text-sm text-white/62" %>
+          <%= form.text_field :nickname, required: true, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Luna" %>
+          <p class="mt-2 text-[0.72rem] leading-5 text-white/40">C'est le nom qui apparaitra partout dans ta collection.</p>
+        </div>
+
+        <div>
+          <div class="mb-2 flex items-center justify-between gap-3">
+            <%= form.label :species_name, "Espece", class: "block text-sm text-white/62" %>
+            <span class="text-[0.72rem] text-white/36">Si tu la connais</span>
+          </div>
+          <%= form.text_field :species_name, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Monstera deliciosa" %>
+          <p class="mt-2 text-[0.72rem] leading-5 text-white/40">Tu pourras la confirmer ou la corriger plus tard.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-[1.7rem] border border-white/8 bg-white/[0.03]">
+      <details class="group">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left">
+          <div>
+            <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/42">Optionnel</p>
+            <h2 class="mt-1 font-display text-[1.1rem] font-semibold tracking-[-0.04em] text-[var(--pio-cream)]">Ajouter plus de contexte</h2>
+          </div>
+          <span class="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/48 transition group-open:rotate-45 group-open:text-[var(--pio-mint)]">
+            <%= pio_icon(:plus, size: 16, stroke_width: 2.2) %>
+          </span>
+        </summary>
+
+        <div class="border-t border-white/6 px-5 pb-5 pt-4">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <%= form.label :common_name, "Nom courant", class: "mb-2 block text-sm text-white/62" %>
+              <%= form.text_field :common_name, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Monstera" %>
+            </div>
+
+            <div>
+              <%= form.label :location_name, "Piece ou emplacement", class: "mb-2 block text-sm text-white/62" %>
+              <%= form.text_field :location_name, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Salon, pres de la fenetre" %>
+            </div>
+
+            <div>
+              <%= form.label :growth_stage, "Stade", class: "mb-2 block text-sm text-white/62" %>
+              <%= form.select :growth_stage, Plant.growth_stages.keys.map { |stage| [pio_stage_meta(stage)[:label], stage] }, {}, class: "pio-field w-full rounded-[1.15rem] px-4 py-3" %>
+            </div>
+
+            <div>
+              <%= form.label :acquired_at, "Arrivee a la maison", class: "mb-2 block text-sm text-white/62" %>
+              <%= form.date_field :acquired_at, class: "pio-field w-full rounded-[1.15rem] px-4 py-3" %>
+            </div>
+          </div>
+
+          <%= form.fields_for :plant_photo, @plant.plant_photos.first do |photo_fields| %>
+            <div class="mt-4">
+              <%= photo_fields.label :notes, "Legende rapide de la premiere photo", class: "mb-2 block text-sm text-white/62" %>
+              <%= photo_fields.text_area :notes, rows: 3, class: "pio-field w-full rounded-[1.15rem] px-4 py-3", placeholder: "Nouvelle feuille, rempotage recent, lumiere du matin..." %>
+            </div>
+          <% end %>
+
+          <div class="mt-4">
+            <%= form.label :description, "Histoire ou notes", class: "mb-2 block text-sm text-white/62" %>
+            <%= form.text_area :description, rows: 5, class: "pio-field w-full rounded-[1.35rem] px-4 py-3", placeholder: "Pourquoi tu l'as choisie, ce que tu surveilles deja, le mood de la plante..." %>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <div class="rounded-[1.4rem] border border-[var(--pio-mint)]/12 bg-[var(--pio-mint)]/6 p-4 text-sm leading-6 text-white/62">
+      Tu peux creer la plante maintenant avec tres peu d'infos. L'objectif est d'entrer vite dans la collection, pas de tout remplir d'un coup.
+    </div>
+
+    <div class="flex items-center justify-between gap-3">
+      <%= link_to "Retour", root_path, class: "inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/72 backdrop-blur" %>
+      <%= form.submit "Creer ma plante", class: "inline-flex items-center rounded-full bg-[linear-gradient(160deg,_var(--pio-mint),_var(--pio-leaf))] px-5 py-3 text-sm font-semibold text-[var(--pio-forest)] shadow-[0_10px_24px_rgba(91,255,152,0.28)]" %>
+    </div>
   <% end %>
 </section>
+
+<%= render "shared/bottom_nav", active: :add %>

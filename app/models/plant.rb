@@ -13,7 +13,7 @@ class Plant < ApplicationRecord
 
   enum :growth_stage, STAGES, validate: true
 
-  validates :nickname, :species_name, presence: true
+  validates :nickname, presence: true
   validates :xp, numericality: { greater_than_or_equal_to: 0 }
   validates :level, numericality: { greater_than: 0 }
 
@@ -21,6 +21,10 @@ class Plant < ApplicationRecord
 
   def display_name
     nickname.presence || species_name
+  end
+
+  def species_label
+    species_name.presence || common_name.presence || "Espece a confirmer"
   end
 
   def hero_photo

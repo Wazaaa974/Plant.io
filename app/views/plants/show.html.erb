@@ -30,7 +30,7 @@
 
   <div class="relative mt-[-1.65rem] px-1">
     <h1 class="font-serif text-[2.8rem] font-normal leading-none tracking-[-0.08em] text-[var(--pio-cream)]"><%= @plant.display_name %></h1>
-    <p class="mt-2 text-sm italic text-white/52"><%= @plant.species_name %><% if @plant.location_name.present? %> · <%= @plant.location_name %><% end %></p>
+    <p class="mt-2 text-sm italic text-white/52"><%= @plant.species_label %><% if @plant.location_name.present? %> · <%= @plant.location_name %><% end %></p>
 
     <div class="mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold" style="border-color: color-mix(in srgb, <%= stage[:color] %> 45%, transparent); color: <%= stage[:color] %>; background: color-mix(in srgb, <%= stage[:color] %> 12%, transparent);">
       <%= pio_icon(stage[:icon], size: 14, stroke_width: 2.1) %>
@@ -38,17 +38,47 @@
     </div>
 
     <section class="pio-glass mt-5 rounded-[1.5rem] p-4">
-      <div class="mb-3 flex items-center justify-between gap-3">
-        <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[var(--pio-leaf)]/75">Prochaine etape</p>
-        <p class="font-display text-sm font-semibold text-[var(--pio-mint)]"><%= stage[:label] %></p>
+      <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
+        <div>
+          <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[var(--pio-leaf)]/75">Progression</p>
+          <h2 class="mt-1 font-display text-[1.2rem] font-semibold tracking-[-0.04em] text-[var(--pio-cream)]">Niveau <%= @plant.level %> · <%= stage[:label] %></h2>
+          <p class="mt-2 text-sm leading-6 text-white/52"><%= pio_stage_supporting_copy(@plant.growth_stage) %></p>
+        </div>
+        <div class="rounded-[1.1rem] border border-white/8 bg-black/10 px-3 py-2 text-right">
+          <p class="text-[0.62rem] uppercase tracking-[0.18em] text-white/36">Stade</p>
+          <p class="mt-1 font-display text-base font-semibold text-[var(--pio-cream)]"><%= pio_stage_step_label(@plant.growth_stage) %></p>
+        </div>
       </div>
-      <div class="pio-progress relative h-2 overflow-hidden rounded-full bg-white/8">
-        <span class="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,_var(--pio-mint),_var(--pio-leaf))]" style="width: <%= pio_growth_percent(@plant) %>%"></span>
+
+      <div class="mt-4 rounded-[1.25rem] border border-white/8 bg-black/10 p-3.5">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/40">XP du niveau en cours</p>
+            <p class="mt-1 font-display text-base font-semibold text-[var(--pio-cream)]"><%= pio_level_progress_label(@plant) %></p>
+          </div>
+          <div class="text-right">
+            <p class="text-[0.65rem] uppercase tracking-[0.18em] text-white/36">Ensuite</p>
+            <p class="mt-1 text-sm font-semibold text-[var(--pio-mint)]"><%= pio_next_level_label(@plant) %></p>
+          </div>
+        </div>
+        <div class="mt-3 pio-progress relative h-2 overflow-hidden rounded-full bg-white/8">
+          <span class="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,_var(--pio-mint),_var(--pio-leaf))]" style="width: <%= pio_growth_percent(@plant) %>%"></span>
+        </div>
+        <div class="mt-2 flex items-center justify-between text-[0.72rem] text-white/45">
+          <span>Total <%= @plant.xp %> XP</span>
+          <span>Encore <span class="font-semibold text-[var(--pio-cream)]"><%= @remaining_xp %> XP</span></span>
+        </div>
       </div>
-      <div class="mt-2 flex items-center justify-between text-[0.72rem] text-white/45">
-        <span><%= @plant.xp %> / <%= @plant.xp_for_next_level %> XP</span>
-        <span>Encore <span class="font-semibold text-[var(--pio-cream)]"><%= @remaining_xp %> XP</span></span>
-      </div>
+
+      <% if (next_stage = pio_next_stage_meta(@plant.growth_stage)).present? %>
+        <div class="mt-3 flex items-center justify-between rounded-[1.15rem] border border-white/8 bg-white/4 px-3 py-2.5 text-sm">
+          <span class="text-white/48">Prochain stade</span>
+          <span class="inline-flex items-center gap-2 font-semibold" style="color: <%= next_stage[:color] %>;">
+            <%= pio_icon(next_stage[:icon], size: 14, stroke_width: 2.1) %>
+            <%= next_stage[:label] %>
+          </span>
+        </div>
+      <% end %>
     </section>
 
     <div class="mt-4 grid grid-cols-4 gap-2">

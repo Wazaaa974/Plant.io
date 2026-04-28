@@ -1,11 +1,11 @@
 <% meta = pio_stage_meta(plant.growth_stage) %>
-<% tint_class = meta[:color].include?("violet") ? "pio-plant-card-violet" : "" %>
+<% tint_class = pio_stage_tint_class(plant.growth_stage) %>
 
 <%= link_to plant_path(plant), class: "pio-plant-card #{tint_class} relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-white/5 p-3.5 shadow-[0_18px_34px_rgba(0,0,0,0.36)] transition duration-300 hover:-translate-y-0.5 hover:border-white/12" do %>
   <div class="relative z-10 flex items-start justify-between gap-3">
     <div class="min-w-0">
       <p class="font-display text-[1.05rem] font-semibold tracking-[-0.03em] text-[var(--pio-cream)]"><%= plant.display_name %></p>
-      <p class="truncate text-[0.72rem] italic text-white/42"><%= plant.species_name %></p>
+      <p class="truncate text-[0.72rem] italic text-white/42"><%= plant.species_label %></p>
     </div>
     <span class="shrink-0 rounded-full border px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em]" style="border-color: color-mix(in srgb, <%= meta[:color] %> 45%, transparent); color: <%= meta[:color] %>; background: color-mix(in srgb, <%= meta[:color] %> 12%, transparent);">
       <%= plant.level %>
@@ -25,10 +25,15 @@
 
   <div class="relative z-10 mt-3 flex items-center justify-between text-[0.72rem] text-white/62">
     <span><%= meta[:label] %></span>
-    <span><%= plant.xp %> XP</span>
+    <span>Lv <%= plant.level %> · <%= plant.xp_progress %>/100 XP</span>
   </div>
 
   <div class="pio-progress relative z-10 mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
     <span class="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,_var(--pio-mint),_var(--pio-leaf))]" style="width: <%= pio_growth_percent(plant) %>%"></span>
+  </div>
+
+  <div class="relative z-10 mt-2 flex items-center justify-between text-[0.65rem] text-white/40">
+    <span>Stade <%= pio_stage_step_label(plant.growth_stage) %></span>
+    <span><%= pio_next_level_label(plant) %></span>
   </div>
 <% end %>

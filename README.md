@@ -19,6 +19,11 @@ First Rails foundation for the `plante.io` web app.
 - plant creation with first photo
 - growth stage, level, XP, and basic timeline events
 
+## Product docs
+
+- [Project context](./contexte.md)
+- [MVP kanban](./mvp-kanban.md)
+
 ## Boot
 
 ```bash

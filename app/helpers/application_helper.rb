@@ -1,4 +1,6 @@
 module ApplicationHelper
+  PIO_STAGE_ORDER = %w[cutting seedling growing mature majestic].freeze
+
   PIO_STAGE_META = {
     "cutting" => { label: "Bouture", color: "var(--pio-leaf)", icon: :sprout },
     "seedling" => { label: "Jeune pousse", color: "var(--pio-mint)", icon: :sprout },
@@ -27,6 +29,10 @@ module ApplicationHelper
     PIO_EVENT_META.fetch(event_type.to_s, PIO_EVENT_META["observation"])
   end
 
+  def pio_stage_tint_class(stage)
+    pio_stage_meta(stage)[:color].include?("violet") ? "pio-plant-card-violet" : ""
+  end
+
   def pio_greeting_name(user)
     return "Jardinier" unless user
 
@@ -43,6 +49,44 @@ module ApplicationHelper
     return 0 if plant.xp_for_next_level <= 0
 
     ((plant.xp_progress.to_f / 100) * 100).clamp(0, 100).round
+  end
+
+  def pio_level_progress_label(plant)
+    "#{plant.xp_progress} / 100 XP sur ce niveau"
+  end
+
+  def pio_next_level_label(plant)
+    "Niveau #{plant.level + 1}"
+  end
+
+  def pio_next_stage_meta(stage)
+    current_index = PIO_STAGE_ORDER.index(stage.to_s) || 0
+    next_key = PIO_STAGE_ORDER[[current_index + 1, PIO_STAGE_ORDER.size - 1].min]
+    return nil if next_key == stage.to_s
+
+    pio_stage_meta(next_key)
+  end
+
+  def pio_stage_step_label(stage)
+    current_index = PIO_STAGE_ORDER.index(stage.to_s) || 0
+    "#{current_index + 1} / #{PIO_STAGE_ORDER.size}"
+  end
+
+  def pio_stage_supporting_copy(stage)
+    case stage.to_s
+    when "cutting"
+      "La plante s'installe encore. Chaque observation compte."
+    when "seedling"
+      "Les premiers signes de croissance vont definir son rythme."
+    when "growing"
+      "Elle prend sa place. Photos et nouvelles feuilles donnent le ton."
+    when "mature"
+      "Sa silhouette est bien installee. Les updates deviennent de vrais souvenirs."
+    when "majestic"
+      "C'est une plante phare de la collection. Chaque evenement est un milestone."
+    else
+      "Chaque mise a jour aide a raconter sa progression."
+    end
   end
 
   def pio_icon(name, size: 20, classes: nil, stroke_width: 1.9)

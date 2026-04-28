@@ -152,6 +152,10 @@ h3,
   box-shadow: 0 6px 18px rgba(91, 255, 152, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
+.pio-tab-link-primary.is-active {
+  box-shadow: 0 0 0 4px rgba(91, 255, 152, 0.14), 0 10px 24px rgba(91, 255, 152, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
 .pio-field {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -166,4 +170,24 @@ h3,
   border-color: rgba(91, 255, 152, 0.4);
   outline: none;
   box-shadow: 0 0 0 1px rgba(91, 255, 152, 0.18);
+}
+
+.pio-field option {
+  background: var(--pio-jungle-deep);
+  color: var(--pio-cream);
+}
+
+.pio-file {
+  color: rgba(246, 243, 234, 0.7);
+}
+
+.pio-file::file-selector-button {
+  margin-right: 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(160deg, var(--pio-mint), var(--pio-leaf));
+  color: var(--pio-forest);
+  font-weight: 600;
+  cursor: pointer;
 }
